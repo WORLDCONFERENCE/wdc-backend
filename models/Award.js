@@ -1,0 +1,81 @@
+const mongoose=require('mongoose');
+
+const AwardSchema=new mongoose.Schema({
+    name:{
+        type:String,
+        default:"",
+        required:true
+    },
+    age:{
+        type:String,
+        default:""
+    },
+    gender:{
+        type:String,
+        default:""
+    },
+    phoneNumber:{
+        type:String,
+        default:""
+    },
+    email:{
+        type:String,
+        default:""
+    },
+    Institution:{
+        type:String,
+        default:""
+    },
+    AwardName:{
+        type:String,
+        default:""
+    },
+    streetName:{
+        type:String,
+        default:""
+    },
+    city:{
+        type:String,
+        default:""
+    },
+    state:{
+        type:String,
+        default:""
+    },
+    country:{
+        type:String,
+        default:""
+    },
+    Pincode:{
+        type:String,
+        default:""
+    },
+    resume:{
+        type:String,
+        default:""
+    },
+    photo:{
+        type:String,
+        default:""
+    },
+    biography:{
+        type:String,
+        default:""
+    },
+    Designation:{
+        type:String,
+        default:""
+      },
+      Qualification:{
+        type:String,
+        default:""
+      },
+      Speciality:{
+        type:String,
+        default:""
+      },
+
+})
+
+
+module.exports=mongoose.model("AwardDetail",AwardSchema) 
