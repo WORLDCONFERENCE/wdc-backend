@@ -298,8 +298,12 @@ const paymentResponse = async (request, response) => {
 
                 particles(payment.order_id);
 
-                alert("Your Transaction is Successful");
-                window.location.href = `https://worlddentalconference.in/login`
+                response.status(200).send(`
+                    <script>
+                        alert('Your Transaction was Successfully Transferred');
+                        window.location.href = 'https://worlddentalconference.in/login';
+                    </script>
+                `);
             } else if (payment.status === "failed" || payment.status === "cancelled") {
                 console.log("cancellede")
                 let query = { order_id: payment.order_id };
