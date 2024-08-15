@@ -298,24 +298,15 @@ const paymentResponse = async (request, response) => {
 
                 particles(payment.order_id);
 
-                response.status(200).send(`
-                    <script>
-                        alert('Your Transaction was Successfully Transferred');
-                        window.location.href = 'https://worlddentalconference.in/login';
-                    </script>
-                `);
+                alert("Your register is successfully submitted");
+             res.redirect('https://worlddentalconference.in/');
             } else if (payment.status === "failed" || payment.status === "cancelled") {
                 console.log("cancellede")
                 let query = { order_id: payment.order_id };
                 await UserSchema.findOneAndDelete(query);
 
                 // Redirect with an alert for cancellation
-                response.status(200).send(`
-                    <script>
-                        alert('Your Transaction Failed or Was Cancelled');
-                        window.location.href = 'https://worlddentalconference.in/registration';
-                    </script>
-                `);
+                  res.redirect('https://worlddentalconference.in/');
             }
         } catch (error) {
             console.log(error);
