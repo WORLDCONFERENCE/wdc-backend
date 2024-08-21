@@ -29,8 +29,6 @@ const addPaymentGateway = async (request, response) => {
     try {
         const order = await razorpay.orders.create(options);
 
-        console.log(order.id)
-
         const params = {
             order_id: order.id,
             amount: order.amount,
@@ -73,7 +71,6 @@ const addPaymentGateway = async (request, response) => {
             "content-type": "application/json",
         });
 
-        console.log("params:-", params);
 
     } catch (error) {
         console.log(error);
@@ -91,19 +88,13 @@ const paymentResponse = async (request, response) => {
         .update(`${razorpay_order_id}|${razorpay_payment_id}`)
         .digest('hex');
 
-    console.log("Expected Signature:", expectedSignature);
-    console.log("Received Signature:", razorpay_signature);
-
     if (expectedSignature === razorpay_signature) {
         try {
             const payment = await razorpay.payments.fetch(razorpay_payment_id);
-            console.log(payment);
 
             if (payment.status === "captured") {
                 // Handle successful payment
                 const date = new Date(payment.created_at * 1000);
-                console.log(date.toLocaleDateString());
-                console.log(date.toLocaleTimeString());
 
                 var newValues = {
                     $set: {
@@ -118,7 +109,6 @@ const paymentResponse = async (request, response) => {
                 };
 
                 let query = { order_id: payment.order_id };
-                console.log(query);
 
                 UserSchema.findOneAndUpdate(
                     query,
@@ -149,8 +139,7 @@ const paymentResponse = async (request, response) => {
                             console.log(docs.email);
                         }
 
-                        console.log(docs);
-
+              
                         function createInvoice(path) {
                             let doc = new PDFDocument({ size: "A5", margin: 50 });
 
