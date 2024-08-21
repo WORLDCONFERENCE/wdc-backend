@@ -287,7 +287,7 @@ const paymentResponse = async (request, response) => {
             }
 
 
-            alert("Your Transaction is Successful");
+         
             response.redirect("https://www.sisahomes.com/");
         } catch (error) {
             console.log(error);
