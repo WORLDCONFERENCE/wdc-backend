@@ -64,7 +64,6 @@ const addPaymentGateway = async (request, response) => {
             gstamount: gstamount,
             CVFiles: CVFiles,
             TotalAmounts: TotalAmounts,
-
         };
 
 
@@ -96,9 +95,6 @@ const paymentResponse = async (request, response) => {
     console.log("Received Signature:", razorpay_signature);
 
     if (expectedSignature === razorpay_signature) {
-
-
-
         try {
             const payment = await razorpay.payments.fetch(razorpay_payment_id);
             console.log(payment);
@@ -216,29 +212,21 @@ const paymentResponse = async (request, response) => {
                                 .font("Helvetica")
                                 .text(`: ${docs?.gstamount}`, 150, customerInformationTop + 90)
                                 .font("Helvetica-Bold")
-                                .text("Transaction ID", 50, customerInformationTop + 105)
+                                .text("Order ID", 50, customerInformationTop + 105)
                                 .font("Helvetica")
-                                .text(`: ${docs?.paymentId}`, 150, customerInformationTop + 105)
+                                .text(`: ${docs?.order_id}`, 150, customerInformationTop + 105)
                                 .font("Helvetica-Bold")
-                                .text("Order ID", 50, customerInformationTop + 120)
+                                .text("Currency", 50, customerInformationTop + 120)
                                 .font("Helvetica")
-                                .text(`: ${docs?.order_id}`, 150, customerInformationTop + 120)
+                                .text(`: ${docs?.currency}`, 150, customerInformationTop + 120)
                                 .font("Helvetica-Bold")
-                                .text("Method", 50, customerInformationTop + 135)
+                                .text("Transaction Date", 50, customerInformationTop + 135)
                                 .font("Helvetica")
-                                .text(`: ${docs?.method}`, 150, customerInformationTop + 135)
+                                .text(`: ${date.toLocaleDateString()}`, 150, customerInformationTop + 135)
                                 .font("Helvetica-Bold")
-                                .text("Currency", 50, customerInformationTop + 150)
+                                .text("Transaction Time", 50, customerInformationTop + 150)
                                 .font("Helvetica")
-                                .text(`: ${docs?.currency}`, 150, customerInformationTop + 150)
-                                .font("Helvetica-Bold")
-                                .text("Transaction Date", 50, customerInformationTop + 165)
-                                .font("Helvetica")
-                                .text(`: ${date.toLocaleDateString()}`, 150, customerInformationTop + 165)
-                                .font("Helvetica-Bold")
-                                .text("Transaction Time", 50, customerInformationTop + 180)
-                                .font("Helvetica")
-                                .text(`: ${date.toLocaleTimeString()}`, 150, customerInformationTop + 180)
+                                .text(`: ${date.toLocaleTimeString()}`, 150, customerInformationTop + 150)
                                 .moveDown();
                         }
 
@@ -272,8 +260,7 @@ const paymentResponse = async (request, response) => {
                                     <img src="cid:nainarmy432@gmail.com" width="400" />
                                     <h1>Hi ${docs.name},</h1>
                                     <h3>Your Registration is Successful!</h3>
-                                    <h5>Your password will be the first four letters of your email, followed by '@', and the date and month of your birth.<br />
-                                    For example, if your email is davidrake12@gmail.com and your DOB is 27-08-1997, your password will be davi@2708.</h5>
+                                   
                                 `, // Embedded image links to content ID
                                 attachments: [
                                     {
@@ -295,21 +282,16 @@ const paymentResponse = async (request, response) => {
                         main();
                     });
                 };
-
                 particles(payment.order_id);
 
-                alert("Your register is successfully submitted");
-             res.redirect('https://worlddentalconference.in/');
-            } else if (payment.status === "failed" || payment.status === "cancelled") {
-                console.log("cancellede")
-                let query = { order_id: payment.order_id };
-                await UserSchema.findOneAndDelete(query);
-
-                // Redirect with an alert for cancellation
-                  res.redirect('https://worlddentalconference.in/');
             }
+
+
+            alert("Your Transaction is Successful");
+            response.redirect("https://www.sisahomes.com/");
         } catch (error) {
             console.log(error);
+            alert("Your Transaction is Unsuccessful");
             response.status(500).send("Error verifying payment");
         }
 
