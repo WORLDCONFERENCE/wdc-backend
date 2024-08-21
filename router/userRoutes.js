@@ -113,17 +113,19 @@ router.get("/counts", async (req, res) => {
 
 //total person register count
 
-router.get("/countRegister", async (req, res) => {
+router.get("/countRegister", async (req, res, next) => {
   try {
-    const users = await userSchema.find().count();
-    res.status(200).json(users);
+    const users = await userSchema.find();
+    const paidUsers = users.filter(user => user.paymentId && user.paymentId !== "")
+    const countUsers = paidUsers.length;
+    res.status(200).json(countUsers);
   } catch (err) {
     next(err);
   }
 });
 
 //delete user
- 
+
 router.delete("/:id", async (req, res, next) => {
   try {
     await userSchema.findByIdAndDelete(req.params.id);
@@ -149,7 +151,8 @@ router.get("/:id", async (req, res, next) => {
 router.get("/", async (req, res, next) => {
   try {
     const users = await userSchema.find();
-    res.status(200).json(users);
+    const PaidUSers = users.filter(user => user.paymentId && user.paymentId !== "")
+    res.status(200).json(PaidUSers);
   } catch (err) {
     next(err);
   }
