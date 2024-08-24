@@ -272,6 +272,8 @@ const paymentResponse = async (request, response) => {
                     });
                 };
                 particles(payment.order_id);
+                     payment.status === "captured" && alert("Your Registration is Successfully")
+                payment.status === "captured" && window.location.replace("http://localhost:3000/#/registration");
 
             }
 
