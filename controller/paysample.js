@@ -155,7 +155,7 @@ const paymentResponse = async (request, response) => {
                         }
 
                         function generateHeader(doc) {
-                            doc.image("./logo.png", 50, 85, { width: 50 });
+                            doc.image("./logos.png", 50, 85, { width: 50 });
                             doc
                                 .fillColor("#444444")
                                 .font("Helvetica-Bold")
