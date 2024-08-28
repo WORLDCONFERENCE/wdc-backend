@@ -2,12 +2,10 @@ const Razorpay = require('razorpay');
 const { v4: uuid } = require('uuid');
 const axios = require('axios');
 const dotenv = require("dotenv");
-const alert = require('alert');
 const UserSchema = require('../models/UserSchema');
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const nodemailer = require("nodemailer");
-
 dotenv.config();
 
 
@@ -15,6 +13,8 @@ const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET
 });
+
+
 const addPaymentGateway = async (request, response) => {
 
     const { name, age, gender, Institution, yearofStudy, streetName, city, state, password, email, isAdmin, profilePic, UploadFile, phoneNumber, BasicAmount, Roles, Designation, Qualification, Speciality, Presentation, Speak, biographyFiles, subjectofPresentation, AccompanyCount, TotalAmount, CVFiles, TotalAmounts, gstamount } = request.body;
@@ -28,6 +28,8 @@ const addPaymentGateway = async (request, response) => {
 
     try {
         const order = await razorpay.orders.create(options);
+
+        console.log(order.id)
 
         const params = {
             order_id: order.id,
@@ -71,12 +73,14 @@ const addPaymentGateway = async (request, response) => {
             "content-type": "application/json",
         });
 
+        console.log("params:-", params);
 
     } catch (error) {
         console.log(error);
         response.status(500).send("Error creating order");
     }
 };
+
 
 const paymentResponse = async (request, response) => {
     const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = request.body;
@@ -139,7 +143,7 @@ const paymentResponse = async (request, response) => {
                             console.log(docs.email);
                         }
 
-              
+
                         function createInvoice(path) {
                             let doc = new PDFDocument({ size: "A5", margin: 50 });
 
@@ -230,64 +234,60 @@ const paymentResponse = async (request, response) => {
 
                         createInvoice("./Statement.pdf");
 
+
                         const main = async () => {
                             let transporter = nodemailer.createTransport({
                                 host: "smtp.gmail.com",
                                 port: 465,
-                                secure: true,
+                                secure: true, // true for 465, false for other ports
                                 auth: {
                                     user: "worlddentistsassociation@gmail.com",
-                                    pass: "gvbuonasubwwnpsp", // ⚠️ Use environment variables set on the server for these values when deploying
+                                    pass: "gvbuonasubwwnpsp", // ⚠️ Use environment variables in production
                                 },
+                                tls: {
+                                    rejectUnauthorized: false // Disable certificate validation (use with caution)
+                                }
                             });
 
                             let info = await transporter.sendMail({
-                                from: '"worlddentistsassociation@gmail.com',
+                                from: '"World Dentists Association" <worlddentistsassociation@gmail.com>',
                                 to: `${docs.email},chairman.wdc2023@gmail.com`,
                                 subject: "Congratulations! Successfully Registered to WDC 2024",
                                 html: `
-                                    <img src="cid:nainarmy432@gmail.com" width="400" />
                                     <h1>Hi ${docs.name},</h1>
-                                    <h3>Your Registration is Successful!</h3>
-                                   
-                                `, // Embedded image links to content ID
+                                    <h3>Your Registration is Successfull!</h3>
+                                `,
                                 attachments: [
-                                    {
-                                        filename: "Statement.pdf",
-                                        path: "./Statement.pdf",
-                                        cid: "nainarmy412@gmail.com", // Sets content ID
-                                    },
                                     {
                                         filename: "poster.png",
                                         path: "./poster.png",
                                         cid: "nainarmy432@gmail.com", // Sets content ID
                                     },
+                                    {
+                                        filename: "Statement.pdf",
+                                        path: "./Statement.pdf",
+                                        cid: "nainarmy412@gmail.com", // Sets content ID
+                                    },
                                 ],
                             });
 
-                            console.log(info.messageId);
+                            console.log('Message sent:', info.messageId);
                         };
 
-                        main();
+                        main().catch(console.error);
                     });
                 };
-                particles(payment.order_id);
-                     payment.status === "captured" && alert("Your Registration is Successfully")
-                payment.status === "captured" && window.location.replace("http://localhost:3000/#/registration");
+                await particles(payment.order_id);
+
+                payment.status === "captured" && (response.json({ success: true }));
 
             }
 
-
-         
-            response.redirect("https://www.sisahomes.com/");
         } catch (error) {
             console.log(error);
             alert("Your Transaction is Unsuccessful");
             response.status(500).send("Error verifying payment");
         }
-
-
-
 
     } else {
         console.log("Signature Mismatched");
