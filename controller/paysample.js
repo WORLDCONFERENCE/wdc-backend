@@ -216,10 +216,6 @@ const paymentResponse = async (request, response) => {
                                 .text("Transaction Date", 50, customerInformationTop + 135)
                                 .font("Helvetica")
                                 .text(`: ${date.toLocaleDateString()}`, 150, customerInformationTop + 135)
-                                .font("Helvetica-Bold")
-                                .text("Transaction Time", 50, customerInformationTop + 150)
-                                .font("Helvetica")
-                                .text(`: ${date.toLocaleTimeString()}`, 150, customerInformationTop + 150)
                                 .moveDown();
                         }
 
