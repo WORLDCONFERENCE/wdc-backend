@@ -247,7 +247,7 @@ const paymentResponse = async (request, response) => {
 
                             let info = await transporter.sendMail({
                                 from: '"World Dentists Association" <worlddentistsassociation@gmail.com>',
-                                to: `${docs.email},chairman.wdc2023@gmail.com`,
+                                to: `${docs.email},dravarun@gmail.com`,
                                 subject: "Congratulations! Successfully Registered to WDC 2024",
                                 html: `
                                     <h1>Hi ${docs.name},</h1>
